@@ -5,7 +5,7 @@ const { NODE_ENV = 'production' } = process.env
 
 const config = {
   mode: NODE_ENV,
-  // watch: NODE_ENV === 'development',
+  watch: NODE_ENV === 'development',
   devtool: 'inline-source-map', // why not for now?
   target: 'web',
   entry: './src/client/index.tsx',

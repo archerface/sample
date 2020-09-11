@@ -1,3 +1,5 @@
+import * as path from 'path'
+
 import { default as express } from 'express'
 import * as bodyParser from 'body-parser'
 import { default as helmet } from 'helmet'
@@ -16,9 +18,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({
-    message: `Hey did it work? ${Math.floor(Math.random() * 100000)}`
-  })
+  const pathToIndex = path.join(__dirname, 'dist/client/index.html')
+  console.log(pathToIndex)
+  console.log(path.resolve('../../dist/client/index.html'))
+  res.sendFile(pathToIndex)
 
   next()
 })

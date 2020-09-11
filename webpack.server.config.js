@@ -4,7 +4,7 @@ const WebpackShellPlugin = require('webpack-shell-plugin')
 
 const { NODE_ENV = 'production' } = process.env
 
-module.exports = {
+const config = {
   mode: NODE_ENV,
   devtool: 'inline-source-map', // why not for now?
   target: 'node',
@@ -14,7 +14,8 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: ['ts-loader']
+        use: ['ts-loader'],
+        exclude: '/node_modules/'
       }
     ]
   },
@@ -27,8 +28,10 @@ module.exports = {
   },
   externals: [nodeExternals()],
   plugins: [
-    new WebpackShellPlugin({
-      onBuildEnd: ['yarn run:dev-server']
-    })
+    // new WebpackShellPlugin({
+    //   // onBuildEnd: ['yarn build:dev-client', 'yarn run:dev-server']
+    // })
   ]
 }
+
+module.exports = config

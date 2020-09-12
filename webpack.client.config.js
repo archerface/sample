@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const { NODE_ENV = 'production' } = process.env
 
@@ -18,6 +19,30 @@ const config = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: '/node_modules/'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: true
+              // modules: {
+              //   namedExports: true
+              // }
+            }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              esModule: true
+              // modules: {
+              //   namedExports: true,
+              //   localIdentName: 'styles-[name]-[local]'
+              // }
+            }
+          }
+        ]
       }
     ]
   },
@@ -28,7 +53,8 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html'
-    })
+    }),
+    new MiniCssExtractPlugin()
   ]
 }
 

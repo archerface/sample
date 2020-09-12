@@ -29,7 +29,7 @@ const config = {
   externals: [nodeExternals()],
   plugins: [
     new WebpackShellPlugin({
-      onBuildEnd: [/* 'yarn build:dev-client' */ 'yarn run:dev-server']
+      onBuildEnd: ['yarn run:dev-server']
     })
   ]
 }

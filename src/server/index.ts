@@ -9,6 +9,7 @@ import { default as compression } from 'compression'
 import { Request, Response, NextFunction } from 'express'
 
 import accountsRouter from './routes/accounts'
+import productsRouter from './routes/products'
 
 const PORT = 3000
 
@@ -30,6 +31,8 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 // app.use('/sdl/v1/accounts', accountsRouter)
+
+// app.use('/sdl/v1/products', productsRouter)
 
 app.listen(PORT, () => {
   console.log(`Server stating at http://localhost:${PORT}`)

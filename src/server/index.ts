@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser'
 import { default as helmet } from 'helmet'
 import { default as morgan } from 'morgan'
 import { default as compression } from 'compression'
+import { default as session } from 'express-session'
+import { MongoClient } from 'mongodb'
 
 import { Request, Response, NextFunction } from 'express'
 
@@ -21,6 +23,19 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(compression())
 
+app.use(
+  session({
+    secret: 'His name is Robert Paulson',
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 12, // expire in 12 hours
+      // since this is a demo and won't have an https connection there is no point in having a secure cookie
+      secure: false
+    },
+    saveUninitialized: false,
+    resave: false
+  })
+)
+
 // static front end files; if I was making a real application I would set this whole thing
 // behind a reverse proxy in nginx (or Api Gateway if in AWS) to handle error pages, compression, etc.
 app.use(express.static(path.resolve('./dist/client')))
@@ -30,7 +45,7 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).sendFile(pathToIndex)
 })
 
-// app.use('/sdl/v1/accounts', accountsRouter)
+app.use('/sdl/v1/accounts', accountsRouter)
 
 // app.use('/sdl/v1/products', productsRouter)
 

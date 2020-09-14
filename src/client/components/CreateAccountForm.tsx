@@ -43,7 +43,7 @@ export default class CreateAccountForm extends React.Component<{}, CreateAccount
 
   render(): React.ReactNode {
     return (
-      <form onSubmit={this._createAccount}>
+      <form onSubmit={this._createAccount} className="sample__form__account__create">
         <label>
           Email:
           <input type="email" value={this.state.email} onChange={this._validateEmail} required />
@@ -63,12 +63,19 @@ export default class CreateAccountForm extends React.Component<{}, CreateAccount
             type="password"
             value={this.state.password}
             onChange={this._validatePassword}
+            autoComplete="off"
             required
           />
         </label>
         <label>
           Repeat Password:
-          <input type="password" value={''} onChange={this._validatePassword} required />
+          <input
+            type="password"
+            value={''}
+            onChange={this._validatePassword}
+            autoComplete="off"
+            required
+          />
         </label>
         <input type="submit" value="Create Account" />
       </form>

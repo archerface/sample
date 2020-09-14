@@ -1,0 +1,9 @@
+.sample__form__account__create {
+  display: flex;
+  flex-direction: column;
+  max-width: 25%;
+}
+
+.sample__form__account__create input[type='submit'] {
+  max-width: 150px;
+}

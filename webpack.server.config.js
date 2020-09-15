@@ -26,8 +26,11 @@ const config = {
     path: path.resolve(__dirname, 'dist/server/'),
     filename: 'index.js'
   },
-  externals: [nodeExternals()],
-  plugins: [
+  externals: [nodeExternals()]
+}
+
+if (NODE_ENV === 'development') {
+  config.plugins = [
     new WebpackShellPlugin({
       onBuildEnd: ['yarn run:dev-server']
     })

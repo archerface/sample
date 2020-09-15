@@ -1,18 +1,21 @@
 import { Router } from 'express'
-import * as Mongoose from 'mongoose'
+import { default as Mongoose } from 'mongoose'
+import { v4 } from 'uuid'
+import { hash, compare } from 'bcrypt'
 
 import AccountModel from '../models/account'
 
 import { Request, Response, NextFunction } from 'express'
+import { AccountCreationData, validateAccountBody } from '../utils/accountUtils'
 
-console.log(Mongoose.connect)
-Mongoose.connect('mongodb://localhost:27017/accounts', { useNewUrlParser: true })
+Mongoose.connect('mongodb://localhost:27017/accounts', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 
 const accountsRouter = Router()
 
 accountsRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-  /* get an account using the id */
-
   const account = await AccountModel.findOne({ id: req.params.id })
 
   if (account) {
@@ -32,10 +35,6 @@ accountsRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
   next()
 })
 
-accountsRouter.post('/create', () => {
-  /* take a payload and create an account from it */
-})
-
 accountsRouter.put('/:id', () => {
   /* update an account details */
 })
@@ -43,5 +42,58 @@ accountsRouter.put('/:id', () => {
 accountsRouter.delete('/:id', () => {
   /* delete account that has the given id */
 })
+
+accountsRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+  const accountId = v4()
+  const accountData: AccountCreationData = req.body
+
+  if (req.cookies.accountId) {
+    const existingAccount = await AccountModel.findOne({ id: req.cookies.accountId })
+
+    res.status(409).json({
+      error: true,
+      message: 'Account already exists with the given username or email',
+      data: {}
+    })
+  } else if (validateAccountBody(req.body)) {
+    const hashedPassword = await hash(accountData.password, 10)
+    const userAccount = new AccountModel({
+      id: accountId,
+      email: accountData.email,
+      username: accountData.username,
+      hashedPassword
+    })
+    console.log('account model instance', userAccount)
+
+    await userAccount.save()
+
+    res.cookie('accountId', accountId, {
+      maxAge: 1000 * 60 * 60 * 12 // expire in 12 hours
+    })
+
+    res.status(200).json({
+      error: false,
+      message: 'Account was successfully created',
+      data: {}
+    })
+  }
+
+  next()
+})
+
+accountsRouter.post('/login', (req: Request, res: Response, next: NextFunction) => {
+  const accountData = req.body
+  const accountId = req.session?.accountId
+
+  next()
+})
+
+accountsRouter.post('/logout', (req: Request, res: Response, next: NextFunction) => {
+  const accountData = req.body
+  const accountId = req.session?.accountId
+
+  next()
+})
+
 
 export default accountsRouter

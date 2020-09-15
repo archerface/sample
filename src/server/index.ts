@@ -6,14 +6,14 @@ import { default as helmet } from 'helmet'
 import { default as morgan } from 'morgan'
 import { default as compression } from 'compression'
 import { default as session } from 'express-session'
-import { MongoClient } from 'mongodb'
+import { default as cookieParser } from 'cookie-parser'
 
 import { Request, Response, NextFunction } from 'express'
 
 import accountsRouter from './routes/accounts'
 import productsRouter from './routes/products'
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 const app = express()
 
@@ -21,6 +21,7 @@ app.use(helmet())
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use(compression())
 
 app.use(
@@ -31,8 +32,8 @@ app.use(
       // since this is a demo and won't have an https connection there is no point in having a secure cookie
       secure: false
     },
-    saveUninitialized: false,
-    resave: false
+    saveUninitialized: true,
+    resave: true
   })
 )
 

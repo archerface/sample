@@ -1,10 +1,17 @@
 import * as Mongoose from 'mongoose'
 
+export interface AccountData extends Mongoose.Document {
+  id: string
+  email: string
+  username: string
+  hashedPassword: string
+}
+
 const accountSchema = new Mongoose.Schema({
-  id: String,
-  email: String,
-  username: String,
-  hashedPassword: String
+  id: { type: String, required: true },
+  email: { type: String, required: true },
+  username: { type: String, required: true },
+  hashedPassword: { type: String, required: true }
 })
 
-export default Mongoose.model('account', accountSchema)
+export default Mongoose.model<AccountData>('account', accountSchema)

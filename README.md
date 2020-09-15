@@ -1,5 +1,1 @@
-# Sample App
-
-## Disclaimers
-
-* I assume that you have Yarn installed.
+# Sample App - Simple Account creation / log in

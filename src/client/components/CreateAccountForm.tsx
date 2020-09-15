@@ -14,16 +14,6 @@ interface CreateAccountFormState {
   }
 }
 
-interface ValidationResult {
-  valid: boolean
-  reason?: string
-}
-
-// super simple / naive regexes for validation
-const USERNAME_REGEX = /\w+\d+/
-const EMAIL_REGEX = /[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+\S/
-const PASSWORD_REGEX = /[a-zA-Z0-9!@#$%^&*()+]+\S/
-
 export default class CreateAccountForm extends React.Component<{}, CreateAccountFormState> {
   constructor(props: React.Props<{}>) {
     super(props)
@@ -49,41 +39,25 @@ export default class CreateAccountForm extends React.Component<{}, CreateAccount
     // return { valid: true }
   }
 
-  _validateUsername(event: React.FormEvent<HTMLInputElement>): ValidationResult {
+  _validateUsername(event: React.FormEvent<HTMLInputElement>) {
     const inputEl = event.target as HTMLInputElement
     const inputValue = inputEl.value
-    const usernameValid = USERNAME_REGEX.test(inputValue)
-
-    console.log(usernameValid)
 
     this.setState({ username: inputValue })
-    if (usernameValid) {
-      const newErrors = Object.assign({}, this.state.errors, { username: false })
-      this.setState({ errors: newErrors })
-    } else {
-      const newErrors = Object.assign({}, this.state.errors, { username: true })
-      this.setState({ errors: newErrors })
-    }
-
-    console.log(this.state)
-
-    return { valid: true }
   }
 
-  _validateEmail(event: React.FormEvent<HTMLInputElement>): ValidationResult {
+  _validateEmail(event: React.FormEvent<HTMLInputElement>) {
     const inputEl = event.target as HTMLInputElement
     const inputValue = inputEl.value
+
     this.setState({ email: inputValue })
-
-    console.log(this.state)
-    return { valid: true }
   }
 
-  _validatePassword(event: React.FormEvent<HTMLInputElement>): ValidationResult {
+  _validatePassword(event: React.FormEvent<HTMLInputElement>) {
     const inputEl = event.target as HTMLInputElement
     const inputValue = inputEl.value
+
     this.setState({ password: inputValue })
-    return { valid: true }
   }
 
   render(): React.ReactNode {

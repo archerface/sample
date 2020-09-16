@@ -1,12 +1,11 @@
-version: "3"
+version: '3'
 services:
   mongodb:
     build: ./containers/mongodb
     ports:
-      - "27017:27017"
-  nodejs:
-    build: ./containers/api
-
-networks:
-  app-network:
-    drive: bridge
+      - '27017:27017'
+  # nodejs:
+  #   build: ./containers/api
+# networks:
+#   app-network:
+#     drive: bridge

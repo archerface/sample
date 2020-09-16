@@ -149,7 +149,8 @@ accountsRouter.post('/login', async (req: Request, res: Response, next: NextFunc
 // Not sure why I am getting an [ERR_HTTP_HEADERS_SENT] error from this endpoint.
 // the error callback gets triggered for the attempt to destroy the session but the error is
 // undefined? Not sure what that means. More investigation is warranted.
-accountsRouter.get('/logout', (req: Request, res: Response, next: NextFunction) => {
+// Also used a POST to potential browser prefetching problems.
+accountsRouter.post('/logout', (req: Request, res: Response, next: NextFunction) => {
   // end the session created by express
   req.session?.destroy((error) => console.error('Got an error while attempting to log out', error))
   res.cookie('accountId', '', {

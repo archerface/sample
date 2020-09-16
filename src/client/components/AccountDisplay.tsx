@@ -21,8 +21,6 @@ async function _getAccountData(accountId: string): Promise<AccountData> {
   return accountData.data as AccountData
 }
 
-async function _deleteAccount(accountId: string) {}
-
 export default class AccountDisplay extends React.Component<
   AccountDisplayProps,
   AccountDisplayState
@@ -46,7 +44,7 @@ export default class AccountDisplay extends React.Component<
   }
 
   async _logOut(event: React.MouseEvent<HTMLButtonElement>) {
-    await makeRequest('/accounts/logout', 'GET')
+    await makeRequest('/accounts/logout', 'POST')
     // window.location.reload()
   }
 

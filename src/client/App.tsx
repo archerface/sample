@@ -15,42 +15,43 @@ function _getAccountIdCookie(): string | undefined {
 
 export default function App() {
   const accountIdCookie = _getAccountIdCookie()
-  const [{ renderCreateForm, renderLoginForm }, setFormToRender] = useState({
+  const [{ renderCreateForm, renderLoginForm }, setViewToRender] = useState({
     renderCreateForm: false,
     renderLoginForm: false
   })
 
   const backButton = (
-    <button onClick={() => setFormToRender({ renderCreateForm: false, renderLoginForm: false })}>
+    <button onClick={() => setViewToRender({ renderCreateForm: false, renderLoginForm: false })}>
       {'< Back'}
     </button>
   )
 
   let fragmentToRender: React.ReactNode
 
-  if (accountIdCookie) {
+  if (accountIdCookie && !renderCreateForm && !renderLoginForm) {
     fragmentToRender = <AccountDisplay accountId={accountIdCookie.split('=')[1]} />
   } else if (renderCreateForm) {
     fragmentToRender = (
       <>
         {backButton}
-        <CreateAccountForm />
+        <CreateAccountForm formSubmitCallback={setViewToRender} />
       </>
     )
   } else if (renderLoginForm) {
     fragmentToRender = (
       <>
         {backButton}
-        <LoginForm />
+        <LoginForm formSubmitCallback={setViewToRender} />
       </>
     )
   } else {
     fragmentToRender = (
       <>
-        <button onClick={() => setFormToRender({ renderCreateForm: false, renderLoginForm: true })}>
+        <button onClick={() => setViewToRender({ renderCreateForm: false, renderLoginForm: true })}>
           Log In
         </button>
-        <button onClick={() => setFormToRender({ renderCreateForm: true, renderLoginForm: false })}>
+        or
+        <button onClick={() => setViewToRender({ renderCreateForm: true, renderLoginForm: false })}>
           Create Account
         </button>
       </>

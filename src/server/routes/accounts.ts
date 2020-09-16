@@ -21,10 +21,15 @@ accountsRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
   const account: AccountData | null = await AccountModel.findOne({ id: req.params.id })
 
   if (account) {
+    const responseData = {
+      username: account.username,
+      email: account.email
+    }
+
     res.status(200).json({
       error: false,
       message: '',
-      data: account
+      data: responseData
     })
   } else {
     res.status(404).json({

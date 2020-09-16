@@ -1,12 +1,27 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { makeRequest } from '../utils/requests'
+
 import './createAccountForm.css'
 
-interface CreateAccountFormState {
+interface CreateAccountFormProps {
+  formSubmitCallback: React.Dispatch<
+    // stolen straight form VSCode's type preview overlay
+    React.SetStateAction<{
+      renderCreateForm: boolean
+      renderLoginForm: boolean
+    }>
+  >
+}
+
+interface FormData {
   username: string
   password: string
   email: string
+}
+
+interface CreateAccountFormState extends FormData {
   errors: {
     username: boolean
     password: boolean
@@ -14,8 +29,13 @@ interface CreateAccountFormState {
   }
 }
 
-export default class CreateAccountForm extends React.Component<{}, CreateAccountFormState> {
-  constructor(props: React.Props<{}>) {
+export default class CreateAccountForm extends React.Component<
+  CreateAccountFormProps,
+  CreateAccountFormState
+> {
+  _errorMessage: string = ''
+
+  constructor(props: CreateAccountFormProps) {
     super(props)
 
     this.state = {
@@ -36,7 +56,27 @@ export default class CreateAccountForm extends React.Component<{}, CreateAccount
   }
 
   async _createAccount(event: React.FormEvent<HTMLFormElement>) {
-    // return { valid: true }
+    event.preventDefault()
+
+    const formData = {
+      email: this.state.email,
+      username: this.state.username,
+      password: this.state.password
+    }
+
+    const response = await makeRequest<FormData>('/accounts/create', 'POST', formData)
+    console.log(response)
+
+    this.props.formSubmitCallback({
+      renderCreateForm: false,
+      renderLoginForm: false
+    })
+
+    // If I was using a global state store like Redux, this is where I would just have the server
+    // return the account info for the account that was just made. The problem is that I don't have
+    // a global state store like Redux. So when I go to render the account page componets, I will have
+    // to ask the server for the account info. Not a big deal but would be a minor optimization in a
+    // real application.
   }
 
   _validateUsername(event: React.FormEvent<HTMLInputElement>) {
@@ -84,6 +124,7 @@ export default class CreateAccountForm extends React.Component<{}, CreateAccount
             }`}
             value={this.state.username}
             onChange={this._validateUsername}
+            autoComplete="username"
             required
           />
         </label>
@@ -96,11 +137,12 @@ export default class CreateAccountForm extends React.Component<{}, CreateAccount
             }`}
             value={this.state.password}
             onChange={this._validatePassword}
-            autoComplete="off"
+            autoComplete="current-password"
             required
           />
         </label>
         <input type="submit" value="Create Account" />
+        <span className="sample__form__account__create__error">{this._errorMessage}</span>
       </form>
     )
   }

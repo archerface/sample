@@ -4,14 +4,15 @@
   max-width: 25%;
 }
 
-.sample__form__account__create input[type='submit'] {
-  max-width: 150px;
-}
-
 .sample__form__account__create .sample__form__account__create__input {
   margin: 5px 0;
 }
 
 .sample__form__account__create .sample__form__account__create__input.invalid {
   border: 2.5px solid red;
+}
+
+.sample__form__account__create .sample__form__account__create__error {
+  color: red;
+  font-style: italic;
 }

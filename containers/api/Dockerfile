@@ -1,1 +1,1 @@
-# Create docker file for a container that will run the api and serve the page
+# Create docker file for a container that will run the api and serve the page. Did not have the time to put together a proper Dockerfile for deploying the api.
